@@ -1,0 +1,9 @@
+{
+	"name": "COVID-REPORTING-ADF-YASH",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "249d007f-0875-4cd6-91fe-053a082b75bc",
+		"tenantId": "7d427fc0-177f-4b46-9bc3-df048242160e"
+	}
+}
