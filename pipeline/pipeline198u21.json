@@ -84,7 +84,7 @@
 		"variables": {
 			"sourcerealtive url": {
 				"type": "String",
-				"defaultValue": "cloudboxacademy/covid19/main/ecdc_data/hospital_admissions.csv"
+				"defaultValue": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
 			},
 			"sinkfilename": {
 				"type": "String",
