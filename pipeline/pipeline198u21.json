@@ -58,13 +58,25 @@
 				"inputs": [
 					{
 						"referenceName": "ds_raw_casedeath_europe",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"relativeurl": {
+								"value": "@variables('sourcerealtive url')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "ds_coviddeath_target_raw",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"filename": {
+								"value": "@variables('sinkfilename')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
