@@ -1,5 +1,5 @@
 {
-	"name": "ds_raw_casedeath_europe",
+	"name": "ds_raw_ecdc_source",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "link_casedeath",

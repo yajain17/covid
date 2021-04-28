@@ -57,11 +57,11 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_raw_casedeath_europe",
+						"referenceName": "ds_raw_ecdc_source",
 						"type": "DatasetReference",
 						"parameters": {
 							"relativeurl": {
-								"value": "@variables('sourcerealtive url')",
+								"value": "@pipeline().parameters.sourcerealtive url",
 								"type": "Expression"
 							}
 						}
@@ -69,11 +69,11 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_coviddeath_target_raw",
+						"referenceName": "ds_ecdc_target_raw",
 						"type": "DatasetReference",
 						"parameters": {
 							"filename": {
-								"value": "@variables('sinkfilename')",
+								"value": "@pipeline().parameters.sinkfilename",
 								"type": "Expression"
 							}
 						}
@@ -81,14 +81,12 @@
 				]
 			}
 		],
-		"variables": {
+		"parameters": {
 			"sourcerealtive url": {
-				"type": "String",
-				"defaultValue": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
+				"type": "string"
 			},
 			"sinkfilename": {
-				"type": "String",
-				"defaultValue": "hospital_admission.csv"
+				"type": "string"
 			}
 		},
 		"annotations": []
