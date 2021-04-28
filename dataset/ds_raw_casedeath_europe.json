@@ -5,6 +5,11 @@
 			"referenceName": "link_casedeath",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"relativeurl": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
