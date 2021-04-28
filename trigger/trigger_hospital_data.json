@@ -3,7 +3,18 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_ECBA_covid",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"sourcerealtiveurl": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv",
+					"sinkfilename": "hospitaL_trigger.csv"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
