@@ -21,7 +21,7 @@
 		},
 		"link_casedeath_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://raw.githubusercontent.com/cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
+			"defaultValue": "https://github.com"
 		},
 		"link_casedeath_properties_typeProperties_userName": {
 			"type": "string",

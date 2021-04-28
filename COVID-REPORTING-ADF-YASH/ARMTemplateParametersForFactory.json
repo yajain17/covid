@@ -15,7 +15,7 @@
 			"value": ""
 		},
 		"link_casedeath_properties_typeProperties_url": {
-			"value": "https://raw.githubusercontent.com/cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
+			"value": "https://github.com"
 		},
 		"link_casedeath_properties_typeProperties_userName": {
 			"value": "yashjain"
