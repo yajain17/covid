@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "COVID-REPORTING-ADF-YASH"
+		},
+		"link_casedeath_password": {
+			"value": ""
+		},
+		"ls_ablob_covidbsayash_connectionString": {
+			"value": ""
+		},
+		"ls_adls_covidreportingdaalake_accountKey": {
+			"value": ""
+		},
+		"link_casedeath_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
+		},
+		"link_casedeath_properties_typeProperties_userName": {
+			"value": "yashjain"
+		},
+		"ls_adls_covidreportingdaalake_properties_typeProperties_url": {
+			"value": "https://covidreportingdaalake.dfs.core.windows.net"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
