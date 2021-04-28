@@ -30,6 +30,14 @@
 		"ls_adls_covidreportingdaalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://covidreportingdaalake.dfs.core.windows.net"
+		},
+		"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sourcerealtiveurl": {
+			"type": "string",
+			"defaultValue": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
+		},
+		"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sinkfilename": {
+			"type": "string",
+			"defaultValue": "hospitaL_trigger.csv"
 		}
 	},
 	"variables": {
@@ -87,7 +95,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_coviddeath_target_raw')]",
+			"name": "[concat(parameters('factoryName'), '/ds_ecdc_target_raw')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -182,7 +190,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_raw_casedeath_europe')]",
+			"name": "[concat(parameters('factoryName'), '/ds_raw_ecdc_source')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -214,116 +222,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/link_casedeath')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline198u21')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "copyfromsourcetotarg",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.00:02:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [
-							{
-								"name": "Source",
-								"value": "cloudboxacademy/covid19/raw/main/ecdc_data/cases_deaths.csv"
-							},
-							{
-								"name": "Destination",
-								"value": "raw/ecdc/cases_deaths.csv"
-							}
-						],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "HttpReadSettings",
-									"requestMethod": "GET"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_raw_casedeath_europe",
-								"type": "DatasetReference",
-								"parameters": {
-									"relativeurl": {
-										"value": "@variables('sourcerealtive url')",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_coviddeath_target_raw",
-								"type": "DatasetReference",
-								"parameters": {
-									"filename": {
-										"value": "@variables('sinkfilename')",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"parameters": {
-					"sourcerealtive url": {
-						"type": "string"
-					},
-					"sinkfilename": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"sourcerealtive url": {
-						"type": "String",
-						"defaultValue": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
-					},
-					"sinkfilename": {
-						"type": "String",
-						"defaultValue": "hospital_admission.csv"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_raw_casedeath_europe')]",
-				"[concat(variables('factoryId'), '/datasets/ds_coviddeath_target_raw')]"
 			]
 		},
 		{
@@ -422,6 +320,131 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_population_raw_gz')]",
 				"[concat(variables('factoryId'), '/datasets/ds_population_raw_tsv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_ECBA_covid')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy ecdc data",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_raw_ecdc_source",
+								"type": "DatasetReference",
+								"parameters": {
+									"relativeurl": {
+										"value": "@pipeline().parameters.sourcerealtiveurl",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_ecdc_target_raw",
+								"type": "DatasetReference",
+								"parameters": {
+									"filename": {
+										"value": "@pipeline().parameters.sinkfilename",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"sourcerealtiveurl": {
+						"type": "string"
+					},
+					"sinkfilename": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_raw_ecdc_source')]",
+				"[concat(variables('factoryId'), '/datasets/ds_ecdc_target_raw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_hospital_data')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_ECBA_covid",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"sourcerealtiveurl": "[parameters('trigger_hospital_data_properties_PL_ECBA_covid_parameters_sourcerealtiveurl')]",
+							"sinkfilename": "[parameters('trigger_hospital_data_properties_PL_ECBA_covid_parameters_sinkfilename')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-04-29T05:33:00Z",
+						"timeZone": "UTC",
+						"schedule": {}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_ECBA_covid')]"
 			]
 		}
 	]
