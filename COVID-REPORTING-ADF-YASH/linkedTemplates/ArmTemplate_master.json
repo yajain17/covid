@@ -21,7 +21,7 @@
 		},
 		"link_casedeath_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://github.com"
+			"defaultValue": "https://github.com/"
 		},
 		"link_casedeath_properties_typeProperties_userName": {
 			"type": "string",
@@ -30,14 +30,6 @@
 		"ls_adls_covidreportingdaalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://covidreportingdaalake.dfs.core.windows.net"
-		},
-		"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sourcerealtiveurl": {
-			"type": "string",
-			"defaultValue": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
-		},
-		"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sinkfilename": {
-			"type": "string",
-			"defaultValue": "hospitaL_trigger.csv"
 		},
 		"containerUri": {
 			"type": "string",
@@ -83,12 +75,6 @@
 					},
 					"ls_adls_covidreportingdaalake_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls_covidreportingdaalake_properties_typeProperties_url')]"
-					},
-					"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sourcerealtiveurl": {
-						"value": "[parameters('trigger_hospital_data_properties_PL_ECBA_covid_parameters_sourcerealtiveurl')]"
-					},
-					"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sinkfilename": {
-						"value": "[parameters('trigger_hospital_data_properties_PL_ECBA_covid_parameters_sinkfilename')]"
 					}
 				}
 			},

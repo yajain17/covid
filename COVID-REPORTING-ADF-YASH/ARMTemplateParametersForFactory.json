@@ -15,19 +15,13 @@
 			"value": ""
 		},
 		"link_casedeath_properties_typeProperties_url": {
-			"value": "https://github.com"
+			"value": "https://github.com/"
 		},
 		"link_casedeath_properties_typeProperties_userName": {
 			"value": "yashjain"
 		},
 		"ls_adls_covidreportingdaalake_properties_typeProperties_url": {
 			"value": "https://covidreportingdaalake.dfs.core.windows.net"
-		},
-		"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sourcerealtiveurl": {
-			"value": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
-		},
-		"trigger_hospital_data_properties_PL_ECBA_covid_parameters_sinkfilename": {
-			"value": "hospitaL_trigger.csv"
 		}
 	}
 }
