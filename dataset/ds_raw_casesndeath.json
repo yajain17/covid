@@ -1,5 +1,5 @@
 {
-	"name": "df_raw_casesndeath",
+	"name": "ds_raw_casesndeath",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls_covidreportingdaalake",
