@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "df_transform_casendeath",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
