@@ -1,5 +1,5 @@
 {
-	"name": "ds_output_Casesanddeath",
+	"name": "ds_Processed_output_Casesanddeath",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls_covidreportingdaalake",
