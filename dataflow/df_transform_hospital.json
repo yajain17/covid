@@ -1,0 +1,50 @@
+{
+	"name": "df_transform_hospital",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_hospital_source",
+						"type": "DatasetReference"
+					},
+					"name": "dfhospitalsource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_country_lookup",
+						"type": "DatasetReference"
+					},
+					"name": "lookupcountrycode"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_lookup_dimdate",
+						"type": "DatasetReference"
+					},
+					"name": "datelookup"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "SelectALLrejectURL"
+				},
+				{
+					"name": "LookupCountry"
+				},
+				{
+					"name": "SelectReqField"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "source(output(\n\t\tcountry as string,\n\t\tindicator as string,\n\t\tdate as date,\n\t\tyear_week as string,\n\t\tvalue as double,\n\t\tsource as string,\n\t\turl as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> dfhospitalsource\nsource(output(\n\t\tcountry as string,\n\t\tcountry_code_2_digit as string,\n\t\tcountry_code_3_digit as string,\n\t\tcontinent as string,\n\t\tpopulation as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> lookupcountrycode\nsource(output(\n\t\tcountry as string,\n\t\tcountry_code_2_digit as string,\n\t\tcountry_code_3_digit as string,\n\t\tcontinent as string,\n\t\tpopulation as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> datelookup\ndfhospitalsource select(mapColumn(\n\t\tcountry,\n\t\tindicator,\n\t\tReported_date = date,\n\t\tReported_year_week = year_week,\n\t\tvalue,\n\t\tsource\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectALLrejectURL\nSelectALLrejectURL, lookupcountrycode lookup(SelectALLrejectURL@country == lookupcountrycode@country,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> LookupCountry\nLookupCountry select(mapColumn(\n\t\tcountry = SelectALLrejectURL@country,\n\t\tindicator,\n\t\tReported_date,\n\t\tReported_year_week,\n\t\tvalue,\n\t\tsource,\n\t\tcountry_code_2_digit,\n\t\tcountry_code_3_digit,\n\t\tpopulation\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectReqField\nSelectReqField split(indicator==\"Weekly new hospital admissions per 100k\" ||     indicator== \"Weekly new ICU admissions per 100k\",\n\tdisjoint: false) ~> ConditionalSplit1@(Weekly, Daily)\nConditionalSplit1@Weekly select(mapColumn(\n\t\tcountry,\n\t\tindicator,\n\t\tReported_date,\n\t\tReported_year_week,\n\t\tvalue,\n\t\tsource,\n\t\tcountry_code_2_digit,\n\t\tcountry_code_3_digit,\n\t\tpopulation\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1"
+		}
+	}
+}
