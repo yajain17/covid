@@ -21,24 +21,31 @@
 		},
 		"schema": [
 			{
+				"name": "country",
 				"type": "String"
 			},
 			{
+				"name": "indicator",
 				"type": "String"
 			},
 			{
+				"name": "date",
 				"type": "String"
 			},
 			{
+				"name": "year_week",
 				"type": "String"
 			},
 			{
+				"name": "value",
 				"type": "String"
 			},
 			{
+				"name": "source",
 				"type": "String"
 			},
 			{
+				"name": "url",
 				"type": "String"
 			}
 		]
