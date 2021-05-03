@@ -20,7 +20,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_lookup_dimdate",
+						"referenceName": "ds_dimdate_lookup",
 						"type": "DatasetReference"
 					},
 					"name": "Dimdatelookup"
