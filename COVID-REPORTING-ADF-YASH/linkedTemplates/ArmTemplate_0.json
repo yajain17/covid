@@ -129,6 +129,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": "country_lookup.csv",
+						"folderPath": "Country_lookup",
 						"fileSystem": "lookup"
 					},
 					"columnDelimiter": ",",
@@ -155,6 +156,84 @@
 					},
 					{
 						"name": "population",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls_covidreportingdaalake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dimdate_lookup')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_covidreportingdaalake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "country_lookup.csv",
+						"folderPath": "Country_lookup",
+						"fileSystem": "lookup"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "date_key",
+						"type": "String"
+					},
+					{
+						"name": "date",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "month",
+						"type": "String"
+					},
+					{
+						"name": "day",
+						"type": "String"
+					},
+					{
+						"name": "day_name",
+						"type": "String"
+					},
+					{
+						"name": "day_of_year",
+						"type": "String"
+					},
+					{
+						"name": "week_of_month",
+						"type": "String"
+					},
+					{
+						"name": "week_of_year",
+						"type": "String"
+					},
+					{
+						"name": "month_name",
+						"type": "String"
+					},
+					{
+						"name": "year_month",
+						"type": "String"
+					},
+					{
+						"name": "year_week",
 						"type": "String"
 					}
 				]
@@ -249,7 +328,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": "hospital_admissions.csv",
-						"folderPath": "ecdc",
+						"folderPath": "ecdc/hospital_admissions",
 						"fileSystem": "raw"
 					},
 					"columnDelimiter": ",",
@@ -284,83 +363,6 @@
 					},
 					{
 						"name": "url",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls_covidreportingdaalake')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_lookup_dimdate')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls_covidreportingdaalake",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "dim_date.csv",
-						"fileSystem": "lookup"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "date_key",
-						"type": "String"
-					},
-					{
-						"name": "date",
-						"type": "String"
-					},
-					{
-						"name": "year",
-						"type": "String"
-					},
-					{
-						"name": "month",
-						"type": "String"
-					},
-					{
-						"name": "day",
-						"type": "String"
-					},
-					{
-						"name": "day_name",
-						"type": "String"
-					},
-					{
-						"name": "day_of_year",
-						"type": "String"
-					},
-					{
-						"name": "week_of_month",
-						"type": "String"
-					},
-					{
-						"name": "week_of_year",
-						"type": "String"
-					},
-					{
-						"name": "month_name",
-						"type": "String"
-					},
-					{
-						"name": "year_month",
-						"type": "String"
-					},
-					{
-						"name": "year_week",
 						"type": "String"
 					}
 				]
@@ -497,8 +499,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "case_deaths_uk_ind_only.csv",
-						"folderPath": "ecdc",
+						"fileName": "cases_deaths.csv",
+						"folderPath": "ecdc/cases_deaths",
 						"fileSystem": "raw"
 					},
 					"columnDelimiter": ",",
@@ -585,7 +587,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_ECBA_covid')]",
+			"name": "[concat(parameters('factoryName'), '/PL_ingest_ECBA_covid')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -844,7 +846,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_lookup_dimdate",
+								"referenceName": "ds_dimdate_lookup",
 								"type": "DatasetReference"
 							},
 							"name": "lookupdimdate"
@@ -876,13 +878,13 @@
 							"name": "SelectforSink"
 						}
 					],
-					"script": "source(output(\n\t\tcountry as string,\n\t\tcountry_code as string,\n\t\tcontinent as string,\n\t\tpopulation as integer,\n\t\tindicator as string,\n\t\tdaily_count as short,\n\t\tdate as date 'yyyy-MM-dd',\n\t\trate_14_day as double,\n\t\tsource as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tlimit: 100) ~> casesndeathdatasource\nsource(output(\n\t\tcountry as string,\n\t\tcountry_code_2_digit as string,\n\t\tcountry_code_3_digit as string,\n\t\tcontinent as string,\n\t\tpopulation as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> datalookup\nsource(output(\n\t\tdate_key as string,\n\t\tdate as string,\n\t\tyear as string,\n\t\tmonth as string,\n\t\tday as string,\n\t\tday_name as string,\n\t\tday_of_year as string,\n\t\tweek_of_month as string,\n\t\tweek_of_year as string,\n\t\tmonth_name as string,\n\t\tyear_month as string,\n\t\tyear_week as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> lookupdimdate\ncasesndeathdatasource filter(continent == 'Europe' && not(isNull(country_code))) ~> FilterEuropeonly\nFilterEuropeonly select(mapColumn(\n\t\tcountry,\n\t\tcountry_code,\n\t\tpopulation,\n\t\tindicator,\n\t\tdaily_count,\n\t\treported_date = date,\n\t\tsource\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectonlyrequiredfield\nselectonlyrequiredfield pivot(groupBy(country,\n\t\tcountry_code,\n\t\tpopulation,\n\t\tsource,\n\t\treported_date),\n\tpivotBy(indicator, ['confirmed cases', 'deaths']),\n\tcount = sum(daily_count),\n\tcolumnNaming: '$V_$N',\n\tlateral: true) ~> Pivotcount\nPivotcount, datalookup lookup(Pivotcount@country == datalookup@country,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> lookupcountry\nlookupcountry select(mapColumn(\n\t\tcountry = Pivotcount@country,\n\t\tcountry_code_2_digit,\n\t\tcountry_code_3_digit,\n\t\tpopulation = Pivotcount@population,\n\t\tcases_count = {confirmed cases_count},\n\t\tdeaths_count,\n\t\treported_date,\n\t\tsource\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectforSink\nSelectforSink sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\ttruncate: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> casesanddeathSInk"
+					"script": "source(output(\n\t\tcountry as string,\n\t\tcountry_code as string,\n\t\tcontinent as string,\n\t\tpopulation as integer,\n\t\tindicator as string,\n\t\tdaily_count as short,\n\t\tdate as date,\n\t\trate_14_day as double,\n\t\tsource as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tlimit: 100) ~> casesndeathdatasource\nsource(output(\n\t\tcountry as string,\n\t\tcountry_code_2_digit as string,\n\t\tcountry_code_3_digit as string,\n\t\tcontinent as string,\n\t\tpopulation as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> datalookup\nsource(output(\n\t\tdate_key as string,\n\t\tdate as string,\n\t\tyear as string,\n\t\tmonth as string,\n\t\tday as string,\n\t\tday_name as string,\n\t\tday_of_year as string,\n\t\tweek_of_month as string,\n\t\tweek_of_year as string,\n\t\tmonth_name as string,\n\t\tyear_month as string,\n\t\tyear_week as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> lookupdimdate\ncasesndeathdatasource filter(continent == 'Europe' && not(isNull(country_code))) ~> FilterEuropeonly\nFilterEuropeonly select(mapColumn(\n\t\tcountry,\n\t\tcountry_code,\n\t\tpopulation,\n\t\tindicator,\n\t\tdaily_count,\n\t\treported_date = date,\n\t\tsource\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectonlyrequiredfield\nselectonlyrequiredfield pivot(groupBy(country,\n\t\tcountry_code,\n\t\tpopulation,\n\t\tsource,\n\t\treported_date),\n\tpivotBy(indicator, ['confirmed cases', 'deaths']),\n\tcount = sum(daily_count),\n\tcolumnNaming: '$V_$N',\n\tlateral: true) ~> Pivotcount\nPivotcount, datalookup lookup(Pivotcount@country == datalookup@country,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> lookupcountry\nlookupcountry select(mapColumn(\n\t\tcountry = Pivotcount@country,\n\t\tcountry_code_2_digit,\n\t\tcountry_code_3_digit,\n\t\tpopulation = Pivotcount@population,\n\t\tcases_count = {confirmed cases_count},\n\t\tdeaths_count,\n\t\treported_date,\n\t\tsource\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectforSink\nSelectforSink sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\ttruncate: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> casesanddeathSInk"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_raw_casesndeath')]",
 				"[concat(variables('factoryId'), '/datasets/ds_country_lookup')]",
-				"[concat(variables('factoryId'), '/datasets/ds_lookup_dimdate')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dimdate_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_Processed_output_Casesanddeath')]"
 			]
 		},
@@ -910,7 +912,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_lookup_dimdate",
+								"referenceName": "ds_dimdate_lookup",
 								"type": "DatasetReference"
 							},
 							"name": "Dimdatelookup"
@@ -979,7 +981,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_hospital_source')]",
 				"[concat(variables('factoryId'), '/datasets/ds_country_lookup')]",
-				"[concat(variables('factoryId'), '/datasets/ds_lookup_dimdate')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dimdate_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_prossed_weeklyHospital')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_dailyHospital')]"
 			]

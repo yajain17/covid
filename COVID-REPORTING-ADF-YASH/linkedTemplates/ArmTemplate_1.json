@@ -22,7 +22,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "PL_ECBA_covid",
+							"referenceName": "PL_ingest_ECBA_covid",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
